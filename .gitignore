@@ -1,0 +1,6 @@
+# Build artifacts
+target/
+
+# Editor files
+*.swp
+*.swo
