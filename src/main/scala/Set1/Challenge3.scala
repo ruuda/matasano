@@ -61,11 +61,14 @@ object Challenge3 {
   def main(args: Array[String]) = {
     val input = "1b37373331363f78151b7f2b783431333d" +
                 "78397828372d363c78373e783a393b3736"
-    val ciphertext = decodeHex(input)
 
-    for (key <- 0 to 255) {
-      val plaintext = xorSingle(ciphertext, key.toByte)
-      println(plaintext)
-    }
+    val ciphertext = decodeHex(input)
+    val candidates = (0 to 255).map(key => xorSingle(ciphertext, key.toByte))
+    val strcandidates = candidates.map(bytes => new String(bytes.toArray, "ASCII"))
+
+    val rank = buildRanker("data/frequency.md")
+    val plaintext = strcandidates.maxBy(rank)
+
+    println(plaintext)
   }
 }
