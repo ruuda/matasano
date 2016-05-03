@@ -5,6 +5,8 @@
 // A copy of the License is available in the root of the repository.
 
 import org.scalacheck.Properties
+import org.scalacheck.Prop.forAll
+
 import Challenge1._
 
 object Challenge1Spec extends Properties("Challenge1") {
@@ -14,5 +16,13 @@ object Challenge1Spec extends Properties("Challenge1") {
     val output = "SSdtIGtpbGxpbmcgeW91ciBicmFpbiBsaWtlIGEgcG9pc29" +
                  "ub3VzIG11c2hyb29t"
     output == encodeBase64(decodeHex(input))
+  }
+
+  property("bijectionHex") = forAll { (data: Vector[Byte]) =>
+    decodeHex(encodeHex(data))== data
+  }
+
+  property("bijectionBase64") = forAll { (data: Vector[Byte]) =>
+    decodeBase64(encodeBase64(data)) == data
   }
 }

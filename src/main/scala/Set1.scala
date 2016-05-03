@@ -21,24 +21,33 @@ object Challenge1 {
     }
   }
 
-  def encodeTriple(triple: Array[Byte]): String = {
+  def encodeByte(byte: Byte): String = {
+    val index0 = byte >> 4
+    val index1 = byte
+    val indices = Vector(index0 & 15, index1 & 15)
+    val chars = indices.map(i => hexChars(i))
+    chars.mkString
+  }
+
+  def encodeTriple(triple: Vector[Byte]): String = {
     val index0 = triple(0) >> 2
     val index1 = ((triple(0) & 3) << 4) | (triple(1) >> 4)
     val index2 = ((triple(1) & 15) << 2) | (triple(2) >> 6)
-    val index3 = triple(2) & 63
-    val indices = Array(index0, index1, index2, index3)
+    val index3 = triple(2)
+    val indices = Vector(index0 & 63, index1 & 63, index2 & 63, index3 & 63)
     val chars = indices.map(i => base64Chars(i))
     chars.mkString
   }
 
-  def decodeHex(str: String): Array[Byte] =
-    str.grouped(2).map(b => decodeByte(b)).toArray
+  def decodeHex(str: String): Vector[Byte] =
+    str.grouped(2).map(b => decodeByte(b)).toVector
 
-  def encodeHex(data: Array[Byte]): String = ???
+  def encodeHex(data: Vector[Byte]): String =
+    data.map(b => encodeByte(b)).mkString
 
-  def decodeBase64(str: String): Array[Byte] = ???
+  def decodeBase64(str: String): Vector[Byte] = ???
 
-  def encodeBase64(data: Array[Byte]): String =
+  def encodeBase64(data: Vector[Byte]): String =
     data.grouped(3).map(t => encodeTriple(t)).mkString
 
   def main(args: Array[String]) = {
