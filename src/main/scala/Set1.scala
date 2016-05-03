@@ -52,9 +52,7 @@ object Challenge1 {
   }
 
   def encodeTriple(triple: Vector[Byte]): String = {
-    if (triple.length != 3) {
-      throw new Exception("Triple must consist of 3 elements.")
-    }
+    require(triple.length == 3)
 
     // Note: The & 255 is required here to make the shift behave like a regular
     // shift of an unsigned integer.
