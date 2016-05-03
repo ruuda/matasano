@@ -8,9 +8,10 @@ import org.scalacheck.Properties
 import org.scalacheck.Prop.forAll
 
 import Challenge1._
+import Challenge2._
 
-object Challenge1Spec extends Properties("Challenge1") {
-  property("spec") = {
+object Set1Spec extends Properties("Set1") {
+  property("challenge1") = {
     val input = "49276d206b696c6c696e6720796f757220627261696e206c" +
                 "696b65206120706f69736f6e6f7573206d757368726f6f6d"
     val output = "SSdtIGtpbGxpbmcgeW91ciBicmFpbiBsaWtlIGEgcG9pc29" +
@@ -18,6 +19,16 @@ object Challenge1Spec extends Properties("Challenge1") {
     output == encodeBase64(decodeHex(input))
   }
 
+  property("challenge2") = {
+    val inputA = decodeHex("1c0111001f010100061a024b53535009181c")
+    val inputB = decodeHex("686974207468652062756c6c277320657965")
+    val output = decodeHex("746865206b696420646f6e277420706c6179")
+
+    output == xor(inputA, inputB)
+  }
+}
+
+object AdditionalTests extends Properties("Set1") {
   property("bijectionByte") = forAll { (byte: Byte) =>
     decodeByte(encodeByte(byte)) == byte
   }
