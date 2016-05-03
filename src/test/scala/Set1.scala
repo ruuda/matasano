@@ -18,11 +18,23 @@ object Challenge1Spec extends Properties("Challenge1") {
     output == encodeBase64(decodeHex(input))
   }
 
+  property("bijectionByte") = forAll { (byte: Byte) =>
+    decodeByte(encodeByte(byte)) == byte
+  }
+
+  property("bijectionTriple") = forAll { (b0: Byte, b1: Byte, b2: Byte) =>
+    val triple = Vector(b0, b1, b2)
+    decodeTriple(encodeTriple(triple)) == triple
+  }
+
   property("bijectionHex") = forAll { (data: Vector[Byte]) =>
-    decodeHex(encodeHex(data))== data
+    decodeHex(encodeHex(data)) == data
   }
 
   property("bijectionBase64") = forAll { (data: Vector[Byte]) =>
-    decodeBase64(encodeBase64(data)) == data
+    // For now, ensure that the data length is a multiple of 3, because I do not
+    // deal with padding yet.
+    val data3 = data ++ data ++ data
+    decodeBase64(encodeBase64(data3)) == data3
   }
 }
