@@ -6,7 +6,7 @@
 
 object Challenge1 {
   val hexChars = "0123456789abcdef"
-  val base64Chars = ???
+  val base64Chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"
 
   def decodeByte(str: String): Byte = {
     if (str.length != 2) {
@@ -21,12 +21,25 @@ object Challenge1 {
     }
   }
 
+  def encodeTriple(triple: Array[Byte]): String = {
+    val index0 = triple(0) >> 2
+    val index1 = ((triple(0) & 3) << 4) | (triple(1) >> 4)
+    val index2 = ((triple(1) & 15) << 2) | (triple(2) >> 6)
+    val index3 = triple(2) & 63
+    val indices = Array(index0, index1, index2, index3)
+    val chars = indices.map(i => base64Chars(i))
+    chars.mkString
+  }
+
   def decodeHex(str: String): Array[Byte] =
     str.grouped(2).map(b => decodeByte(b)).toArray
 
   def encodeHex(data: Array[Byte]): String = ???
+
   def decodeBase64(str: String): Array[Byte] = ???
-  def encodeBase64(data: Array[Byte]): String = ???
+
+  def encodeBase64(data: Array[Byte]): String =
+    data.grouped(3).map(t => encodeTriple(t)).mkString
 
   def main(args: Array[String]) = {
     val input = "49276d206b696c6c696e6720796f757220627261696e206c" +
