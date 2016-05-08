@@ -5,6 +5,4 @@
 // A copy of the License is available in the root of the repository.
 
 object Challenge2 {
-  def xor(a: Vector[Byte], b: Vector[Byte]): Vector[Byte] =
-    a.zip(b).map { case (x, y) => (x ^ y).toByte }
 }
