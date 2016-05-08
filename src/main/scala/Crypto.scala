@@ -14,4 +14,9 @@ object Crypto {
     val repeated = Vector.fill(a.length) { key }
     xor(a, repeated)
   }
+
+  def xorRepeat(a: Vector[Byte], key: Vector[Byte]): Vector[Byte] = {
+    val repeated = Stream.continually(key).flatten.take(a.length).toVector
+    xor(a, repeated)
+  }
 }
