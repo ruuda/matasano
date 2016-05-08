@@ -78,4 +78,10 @@ object Encoding {
 
   def encodeBase64(data: Vector[Byte]): String =
     data.grouped(3).map(t => encodeTriple(t)).mkString
+
+  def decodeAscii(data: Vector[Byte]): String =
+    new String(data.toArray, "ASCII")
+
+  def encodeAscii(str: String): Vector[Byte] =
+    ???
 }

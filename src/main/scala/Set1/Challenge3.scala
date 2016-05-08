@@ -15,7 +15,7 @@ object Challenge3 {
 
     val ciphertext = Encoding.decodeHex(input)
     val candidates = (0 to 255).map(key => Crypto.xorSingle(ciphertext, key.toByte))
-    val strcandidates = candidates.map(bytes => new String(bytes.toArray, "ASCII"))
+    val strcandidates = candidates.map(bytes => Encoding.decodeAscii(bytes))
 
     val rank = TextDetection.buildRanker("data/frequency.md")
     val plaintext = strcandidates.maxBy(rank)

@@ -18,7 +18,7 @@ object Challenge4 {
     val strcandidates = file.getLines().flatMap(line => {
       val ciphertext = Encoding.decodeHex(line)
       val candidates = (0 to 255).map(key => Crypto.xorSingle(ciphertext, key.toByte))
-      candidates.map(bytes => new String(bytes.toArray, "ASCII"))
+      candidates.map(bytes => Encoding.decodeAscii(bytes))
     })
 
     val plaintext = strcandidates.maxBy(rank)
