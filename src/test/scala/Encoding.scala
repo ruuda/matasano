@@ -29,4 +29,8 @@ object EncodingTests extends Properties("Encoding") {
     val data3 = data ++ data ++ data
     Encoding.decodeBase64(Encoding.encodeBase64(data3)) == data3
   }
+
+  property("bijectionAscii") = forAll { (data: Vector[Byte]) =>
+    Encoding.encodeAscii(Encoding.decodeAscii(data)) == data
+  }
 }

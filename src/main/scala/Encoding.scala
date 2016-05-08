@@ -80,8 +80,11 @@ object Encoding {
     data.grouped(3).map(t => encodeTriple(t)).mkString
 
   def decodeAscii(data: Vector[Byte]): String =
-    new String(data.toArray, "ASCII")
+    // Actually use Latin 1 to ensure that the upper 128 bytes
+    // can be mapped as well. Do not use UTF-8, because not every
+    // byte sequence is valid UTF-8.
+    new String(data.toArray, "ISO8859_1")
 
   def encodeAscii(str: String): Vector[Byte] =
-    ???
+    str.getBytes("ISO8859_1").toVector
 }
