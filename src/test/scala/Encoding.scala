@@ -19,15 +19,22 @@ object EncodingTests extends Properties("Encoding") {
     Encoding.decodeTriple(Encoding.encodeTriple(triple)) == triple
   }
 
+  property("bijectionTriplePad1") = forAll { (b0: Byte, b1: Byte) =>
+    val pair = Vector(b0, b1)
+    Encoding.decodeTriple(Encoding.encodeTriple(pair)) == pair
+  }
+
+  property("bijectionTriplePad2") = forAll { (b0: Byte) =>
+    val byte = Vector(b0)
+    Encoding.decodeTriple(Encoding.encodeTriple(byte)) == byte
+  }
+
   property("bijectionHex") = forAll { (data: Vector[Byte]) =>
     Encoding.decodeHex(Encoding.encodeHex(data)) == data
   }
 
   property("bijectionBase64") = forAll { (data: Vector[Byte]) =>
-    // For now, ensure that the data length is a multiple of 3, because I do not
-    // deal with padding yet.
-    val data3 = data ++ data ++ data
-    Encoding.decodeBase64(Encoding.encodeBase64(data3)) == data3
+    Encoding.decodeBase64(Encoding.encodeBase64(data)) == data
   }
 
   property("bijectionAscii") = forAll { (data: Vector[Byte]) =>

@@ -61,17 +61,21 @@ object Encoding {
   }
 
   def encodeTriple(triple: Vector[Byte]): String = {
-    require(triple.length == 3)
+    // Pad with zeroes if the triple contains less than three bytes.
+    val numBytes = triple.length
+    val padded = triple.padTo(3, 0.toByte)
 
     // Note: The & 255 is required here to make the shift behave like a regular
     // shift of an unsigned integer.
-    val index0 = (triple(0) & 255) >> 2
-    val index1 = ((triple(0) & 3) << 4) | ((triple(1) & 255) >> 4)
-    val index2 = ((triple(1) & 15) << 2) | ((triple(2) & 255) >> 6)
-    val index3 = (triple(2) & 255)
+    val index0 = (padded(0) & 255) >> 2
+    val index1 = ((padded(0) & 3) << 4) | ((padded(1) & 255) >> 4)
+    val index2 = ((padded(1) & 15) << 2) | ((padded(2) & 255) >> 6)
+    val index3 = (padded(2) & 255)
     val indices = Vector(index0 & 63, index1 & 63, index2 & 63, index3 & 63)
     val chars = indices.map(i => base64Chars(i))
-    chars.mkString
+
+    // Replace encoded zeroes with padding characters.
+    chars.mkString.take(numBytes + 1).padTo(4, '=')
   }
 
   def decodeHex(str: String): Vector[Byte] =
