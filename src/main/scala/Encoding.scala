@@ -38,10 +38,17 @@ object Encoding {
       throw new Exception("Invalid input, not an integer number of bytes.")
     }
 
-    val index0 = base64Chars.indexOf(str(0))
-    val index1 = base64Chars.indexOf(str(1))
-    val index2 = base64Chars.indexOf(str(2))
-    val index3 = base64Chars.indexOf(str(3))
+    // Drop the padding characters.
+    val withoutPadding = str.stripSuffix("==").stripSuffix("=")
+    val numBytes = withoutPadding.length - 1
+
+    // Fill up with zeroes to avoid index out of bounds.
+    val nullStr = withoutPadding.padTo(4, base64Chars(0))
+
+    val index0 = base64Chars.indexOf(nullStr(0))
+    val index1 = base64Chars.indexOf(nullStr(1))
+    val index2 = base64Chars.indexOf(nullStr(2))
+    val index3 = base64Chars.indexOf(nullStr(3))
 
     if (index0 == -1 || index1 == -1 || index2 == -1 || index3 == -1) {
       throw new Exception(s"Invalid input, '$str' is not base64.")
@@ -50,7 +57,7 @@ object Encoding {
     val byte0 = (index0 << 2) | (index1 >> 4)
     val byte1 = (index1 << 4) | (index2 >> 2)
     val byte2 = (index2 << 6) | (index3)
-    Vector(byte0.toByte, byte1.toByte, byte2.toByte)
+    Vector(byte0.toByte, byte1.toByte, byte2.toByte).take(numBytes)
   }
 
   def encodeTriple(triple: Vector[Byte]): String = {
