@@ -12,7 +12,7 @@ import io.Source
 object TextDetection {
   type Histogram[A] = SortedMap[(Char, Char), A]
 
-  def buildHistogramPair(fname: String): Histogram[Int] = {
+  def buildHistogramPairFromFile(fname: String): Histogram[Int] = {
     val file = Source.fromFile(fname)
     var histogram: SortedMap[(Char, Char), Int] = SortedMap()
 
@@ -28,19 +28,20 @@ object TextDetection {
     histogram
   }
 
-  def buildHistogramSingle(fname: String): SortedMap[Char, Int] = {
+  def buildHistogramSingleFromFile(fname: String): SortedMap[Char, Int] = {
     val file = Source.fromFile(fname)
-    var histogram: SortedMap[Char, Int] = SortedMap()
-
-    for (line <- file.getLines()) {
-      for (char <- line) {
-        val count = histogram.getOrElse(char.toLower, 0)
-        histogram = histogram.updated(char.toLower, count + 1)
-      }
-    }
-
+    val chars = file.getLines().flatMap(line => line.to)
+    val histogram = buildHistogram(chars)
     file.close()
     histogram
+  }
+
+  def buildHistogram(chars: Iterator[Char]): SortedMap[Char, Int] = {
+    val empty: SortedMap[Char, Int] = SortedMap()
+    chars.map(c => c.toLower).foldLeft(empty) { (hist, c) =>
+      val count = hist.getOrElse(c, 0)
+      hist.updated(c, count + 1)
+    }
   }
 
   // Ensures that every value in the histogram is in the interval [0, 2].
@@ -58,7 +59,7 @@ object TextDetection {
   // Builds a function that ranks strings based on consecutive character
   // frequencies extracted from the sample file.
   def buildRanker(fname: String): String => Double = {
-    val histInt = buildHistogramPair(fname)
+    val histInt = buildHistogramPairFromFile(fname)
     val histDouble = normalizeHistogramMax(histInt)
 
     def rankChars(chars: (Char, Char)): Double =
@@ -76,7 +77,7 @@ object TextDetection {
   // Builds a function that ranks histograms based on how similar they are to
   // the character frequencies in the sample file.
   def buildHistogramRanker(fname: String): SortedMap[Char, Int] => Double = {
-    val histInt = buildHistogramSingle(fname)
+    val histInt = buildHistogramSingleFromFile(fname)
     val histDouble = normalizeHistogram(histInt)
 
     def rankHistogram(sampleHist: SortedMap[Char, Int]): Double = {
