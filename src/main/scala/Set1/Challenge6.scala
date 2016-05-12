@@ -35,12 +35,12 @@ object Challenge6 {
 
   def guessKey(ciphertext: Vector[Byte], keySize: Int): Vector[Byte] = {
     val rankHist = TextDetection.buildHistogramRanker("data/frequency.md")
-    Vector.tabulate(keySize - 1) { i => {
+    Vector.tabulate(keySize) { i => {
       val cipherChars = ciphertext.grouped(keySize)
                                   .filter(block => block.length > i)
                                   .map(block => block(i))
                                   .toVector
-      val keys = Vector.tabulate(255) { key => {
+      val keys = Vector.tabulate(256) { key => {
         val plaintext = Crypto.xorSingle(cipherChars, key.toByte)
         val histogram = TextDetection.buildHistogram(plaintext.map(byte => byte.toChar).to)
         val rank = rankHist(histogram)
@@ -61,6 +61,9 @@ object Challenge6 {
     val key = guessKey(ciphertext, keySize)
     val keyStr = Encoding.decodeAscii(key)
     println(s"key guess: $keyStr")
+
+    val plaintext = Encoding.decodeAscii(Crypto.xorRepeat(ciphertext, key))
+    println(s"plaintext:\n\n$plaintext")
 
     file.close()
   }
