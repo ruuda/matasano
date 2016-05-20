@@ -4,19 +4,20 @@
 // you may not use this file except in compliance with the License.
 // A copy of the License is available in the root of the repository.
 
+import org.scalacheck.Gen
 import org.scalacheck.Properties
 import org.scalacheck.Prop.forAll
 
 import com.matasano.Aes
 
 object AesTests extends Properties("Aes") {
-  property("bijectionBlock") = forAll { (block: Vector[Byte], key: Vector[Byte]) =>
-    // TODO: Ensure block and key have proper length.
+  val blocks = Gen.listOfN(16, Gen.choose(0.toByte, 255.toByte)).map(_.toVector)
+
+  property("bijectionBlock") = forAll(blocks, blocks) { (block: Vector[Byte], key: Vector[Byte]) =>
     Aes.decrypt(Aes.encrypt(block, key), key) == block
   }
 
-  property("bijectionBlock") = forAll { (block: Vector[Byte], key: Vector[Byte]) =>
-    // TODO: Ensure block and key have proper length.
+  property("bijectionBlock") = forAll(blocks, blocks) { (block: Vector[Byte], key: Vector[Byte]) =>
     Aes.encrypt(Aes.decrypt(block, key), key) == block
   }
 }

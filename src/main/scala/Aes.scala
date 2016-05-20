@@ -11,6 +11,8 @@ object Aes {
   import javax.crypto.spec.SecretKeySpec
 
   def encrypt(block: Vector[Byte], key: Vector[Byte]): Vector[Byte] = {
+    require(block.length == 16)
+
     // Use the Java AES implementation only for its block cipher.
     // The point of this exercise it to learn how to do things myself,
     // so I will not use the standard block-chaining or padding mechanisms.
@@ -21,6 +23,8 @@ object Aes {
   }
 
   def decrypt(block: Vector[Byte], key: Vector[Byte]): Vector[Byte] = {
+    require(block.length == 16)
+
     val cipher = Cipher.getInstance("AES/ECB/NoPadding")
     val keySpec = new SecretKeySpec(key.toArray, "AES")
     cipher.init(Cipher.DECRYPT_MODE, keySpec)
