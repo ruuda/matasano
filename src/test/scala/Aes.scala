@@ -14,10 +14,10 @@ object AesTests extends Properties("Aes") {
   val blocks = Gen.listOfN(16, Gen.choose(0.toByte, 255.toByte)).map(_.toVector)
 
   property("bijectionBlock") = forAll(blocks, blocks) { (block: Vector[Byte], key: Vector[Byte]) =>
-    Aes.decrypt(Aes.encrypt(block, key), key) == block
+    Aes.decrypt(key, Aes.encrypt(key, block)) == block
   }
 
   property("bijectionBlock") = forAll(blocks, blocks) { (block: Vector[Byte], key: Vector[Byte]) =>
-    Aes.encrypt(Aes.decrypt(block, key), key) == block
+    Aes.encrypt(key, Aes.decrypt(key, block)) == block
   }
 }

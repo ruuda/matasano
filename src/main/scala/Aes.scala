@@ -10,7 +10,7 @@ object Aes {
   import javax.crypto.Cipher
   import javax.crypto.spec.SecretKeySpec
 
-  def encrypt(block: Vector[Byte], key: Vector[Byte]): Vector[Byte] = {
+  def encrypt(key: Vector[Byte], block: Vector[Byte]): Vector[Byte] = {
     require(block.length == 16)
 
     // Use the Java AES implementation only for its block cipher.
@@ -22,7 +22,7 @@ object Aes {
     cipher.doFinal(block.toArray).toVector
   }
 
-  def decrypt(block: Vector[Byte], key: Vector[Byte]): Vector[Byte] = {
+  def decrypt(key: Vector[Byte], block: Vector[Byte]): Vector[Byte] = {
     require(block.length == 16)
 
     val cipher = Cipher.getInstance("AES/ECB/NoPadding")
