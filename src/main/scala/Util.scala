@@ -11,7 +11,7 @@ object Util {
 
   def hammingDistance(a: Vector[Byte], b: Vector[Byte]): Int = {
     // Number of bits that differ.
-    val baseDiff = a.zip(b).map { case (x, y) => bitCount(x ^ y) } .sum
+    val baseDiff = a.zip(b).map { case (x, y) => bitCount((x ^ y) & 0xff) } .sum
 
     // Also count a length mismatch as eight different bits per byte.
     val extraDiff = math.abs(a.length - b.length) * 8
