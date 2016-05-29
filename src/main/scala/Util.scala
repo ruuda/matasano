@@ -20,9 +20,24 @@ object Util {
   }
 
   def padPkcs7(a: Vector[Byte], blockSize: Int): Vector[Byte] = {
+    if (blockSize == 0) return a
+
     val modSz = (a.length % blockSize)
     val padLen = if (modSz == 0) { blockSize } else { blockSize - modSz }
-    val padding = Vector.fill(padLen)(padLen.toByte)
-    a ++ padding
+    a.padTo(a.length + padLen, padLen.toByte)
+  }
+
+  def unpadPkcs7(padded: Vector[Byte]): Vector[Byte] = {
+    require(padded.length > 0)
+
+    val b = padded.last
+    assert(b > 0)
+
+    val data = padded.take(padded.length - b)
+    val padding = padded.drop(padded.length - b)
+
+    assert(padding.forall(x => x == b))
+
+    data
   }
 }
