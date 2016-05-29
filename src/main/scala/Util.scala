@@ -18,4 +18,11 @@ object Util {
 
     baseDiff + extraDiff
   }
+
+  def padPkcs7(a: Vector[Byte], blockSize: Int): Vector[Byte] = {
+    val modSz = (a.length % blockSize)
+    val padLen = if (modSz == 0) { blockSize } else { blockSize - modSz }
+    val padding = Vector.fill(padLen)(padLen.toByte)
+    a ++ padding
+  }
 }
