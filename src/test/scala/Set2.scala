@@ -10,7 +10,7 @@ import com.matasano.Encoding
 import com.matasano.Util
 
 object Set2Spec extends Properties("Set2") {
-  property("challenge1") = {
+  property("challenge9") = {
     val input = Encoding.encodeAscii("YELLOW SUBMARINE")
     val output = Encoding.encodeAscii("YELLOW SUBMARINE\u0004\u0004\u0004\u0004")
 
