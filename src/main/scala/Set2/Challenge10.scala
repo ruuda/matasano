@@ -9,6 +9,7 @@ import io.Source
 import com.matasano.Aes
 import com.matasano.Crypto
 import com.matasano.Encoding
+import com.matasano.Util
 
 object Challenge10 {
   def main(args: Array[String]) = {
@@ -19,7 +20,7 @@ object Challenge10 {
     val iv: Vector[Byte] = Vector(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
     val plaintext = Crypto.decryptCbc(decrypt)(iv, ciphertext)
 
-    println(Encoding.decodeAscii(plaintext))
+    println(Encoding.decodeAscii(Util.unpadPkcs7(plaintext)))
 
     file.close()
   }
