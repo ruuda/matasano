@@ -14,9 +14,10 @@ object Challenge7 {
     val file = Source.fromFile("data/challenge7.md")
     val ciphertext = Encoding.decodeBase64(file.getLines.mkString)
     val key = Encoding.encodeAscii("YELLOW SUBMARINE")
+    val decrypt = Aes.decrypt(key)
     val plaintext = ciphertext
       .grouped(16)
-      .map(Aes.decrypt(key, _))
+      .map(decrypt)
       .map(Encoding.decodeAscii)
       .mkString
 
