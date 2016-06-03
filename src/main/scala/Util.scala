@@ -20,7 +20,7 @@ object Util {
   }
 
   def padPkcs7(a: Vector[Byte], blockSize: Int): Vector[Byte] = {
-    if (blockSize == 0) return a
+    if (blockSize == 0) return a ++ Vector(1.toByte)
 
     val modSz = (a.length % blockSize)
     val padLen = if (modSz == 0) { blockSize } else { blockSize - modSz }
