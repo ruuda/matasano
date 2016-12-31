@@ -12,8 +12,8 @@ import com.matasano.Aes
 import com.matasano.Crypto
 
 object CryptoTests extends Properties("Crypto") {
-  val blocks = Gen.listOfN(16, Gen.choose(0.toByte, 255.toByte)).map(_.toVector)
-  val nBlocks = Gen.listOfN(64, Gen.choose(0.toByte, 255.toByte)).map(_.toVector)
+  val blocks = Gen.listOfN(16, Gen.choose(0, 255)).map(_.map(_.toByte).toVector)
+  val nBlocks = Gen.listOfN(64, Gen.choose(0, 255)).map(_.map(_.toByte).toVector)
 
   property("bijectionEncryptCbc") = forAll(blocks, blocks, nBlocks) {
     (iv: Vector[Byte], key: Vector[Byte], plaintext: Vector[Byte]) => {

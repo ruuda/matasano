@@ -11,7 +11,7 @@ import org.scalacheck.Prop.forAll
 import com.matasano.Aes
 
 object AesTests extends Properties("Aes") {
-  val blocks = Gen.listOfN(16, Gen.choose(0.toByte, 255.toByte)).map(_.toVector)
+  val blocks = Gen.listOfN(16, Gen.choose(0, 255)).map(_.map(_.toByte).toVector)
 
   property("bijectionBlock") = forAll(blocks, blocks) { (block: Vector[Byte], key: Vector[Byte]) =>
     Aes.decrypt(key)(Aes.encrypt(key)(block)) == block

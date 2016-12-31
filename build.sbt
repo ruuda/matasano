@@ -1,2 +1,2 @@
 name := "matasano"
-libraryDependencies += "org.scalacheck" %% "scalacheck" % "1.13.0" % "test"
+libraryDependencies += "org.scalacheck" %% "scalacheck" % "1.13.4" % "test"
